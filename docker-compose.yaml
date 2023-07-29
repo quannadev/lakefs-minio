@@ -3,9 +3,11 @@ version: "3.5"
 services:
   lakefs:
     container_name: "lakefs"
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
+
     environment:
       - ACCESS_KEY=testjhkjhakjhsk
       - SECRET_ACCESS_KEY=testabcsasjdhaksjdhk

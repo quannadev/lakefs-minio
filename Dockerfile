@@ -1,5 +1,5 @@
 # Build lakeFS
-FROM --platform=$BUILDPLATFOR alpine:3.18
+FROM alpine:3.18
 
 #install wget
 RUN apk add -U --no-cache ca-certificates netcat-openbsd
