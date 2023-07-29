@@ -1,0 +1,52 @@
+version: "3.5"
+
+services:
+  lakefs:
+    container_name: "lakefs"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ACCESS_KEY=testjhkjhakjhsk
+      - SECRET_ACCESS_KEY=testabcsasjdhaksjdhk
+      - REPOSITORY=test
+    ports:
+      - "8000:8000"
+    depends_on:
+      - minio-setup
+      - postgres
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: "/var/lib/postgresql/data"
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minio_root
+      MINIO_ROOT_PASSWORD: minio_root
+      MINIO_API_ROOT_ACCESS: on
+    command: server /data --console-address ":9001"
+
+  minio-setup:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add local http://minio:9000 minio_root minio_root;
+      /usr/bin/mc rm -r --force local/test;
+      /usr/bin/mc mb local/test;
+      exit 0;
+      "
