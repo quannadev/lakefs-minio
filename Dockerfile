@@ -4,10 +4,13 @@ FROM alpine:3.18
 #install wget
 RUN apk add -U --no-cache ca-certificates netcat-openbsd
 RUN apk add wget && apk add curl
+
+# get lastest version of lakeFS
 ENV LAKEFS_VERSION=0.108.0
+
 #download binary lakefs
-RUN cd /tmp && wget https://github.com/treeverse/lakeFS/releases/download/v0.104.0/lakeFS_0.108.0_Linux_x86_64.tar.gz && \
-    tar xfv lakeFS_0.108.0_Linux_x86_64.tar.gz && \
+RUN cd /tmp && wget https://github.com/treeverse/lakeFS/releases/download/v${LAKEFS_VERSION}/lakeFS_${LAKEFS_VERSION}_Linux_x86_64.tar.gz && \
+    tar xfv lakeFS_${LAKEFS_VERSION}_Linux_x86_64.tar.gz && \
     mv lakefs /bin/lakefs && \
     mv lakectl /bin/lakectl && cd && \
     rm -rf * /tmp/* \
